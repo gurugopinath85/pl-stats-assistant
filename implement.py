@@ -1,11 +1,12 @@
-from flask import Flask, request, jsonify
+#from flask import Flask, request, jsonify
 from openai import OpenAI
 import pandas as pd
 import os
 
 
-app = Flask(__name__)
+#app = Flask(__name__)
 # Load OpenAI API key
+#Main implementation of OpenAI services to be able to create a text-based response
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
 
 # Use Csv files available

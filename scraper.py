@@ -1,3 +1,6 @@
+#Simple scraper to aquire pl data. Will continue to get more data and use different files and values to create
+#a stronger Ai analyzer to create more well rounded responses. 
+
 import pandas as pd
 import datetime
 
