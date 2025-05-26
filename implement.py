@@ -1,10 +1,12 @@
-#from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from openai import OpenAI
 import pandas as pd
 import os
 
 
-#app = Flask(__name__)
+app = Flask(__name__)
+CORS(app)
 # Load OpenAI API key
 #Main implementation of OpenAI services to be able to create a text-based response
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
@@ -39,26 +41,21 @@ Be cautious but helpful in making OVER/UNDER-style suggestions.
 """
 
 # 
-print("Welcome to PL Stats! Ask questions about player stats, prizepicks player props, or other trends. Type 'exit', 'quit', or 'q' to quit.\n")
+@app.route("/ask", methods=["POST"])
+def ask():
+    try:
+        user_question = request.json.get("question")  # ✅ Make sure this matches
 
-while True:
-    user_question = input("Your question: ").strip()
-    if user_question.lower() in ["exit", "quit", "q"]:
-        print("Thank you for using the application! Goodbye!")
-        break
-
-    
-    context = f"""
-STANDARD PLAYER STATS (latest):
+        context = f"""
+STANDARD PLAYER STATS:
 {df_standard.head(40).to_string(index=False)}
 
-HISTORICAL STATS (older or match-level):
+HISTORICAL STATS:
 {df_historical.head(40).to_string(index=False)}
 
 Question: {user_question}
 """
 
-    try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -66,10 +63,11 @@ Question: {user_question}
                 {"role": "user", "content": context}
             ]
         )
-        reply = response.choices[0].message.content
-        print("\nHere's what I found:\n")
-        print(reply)
-        print("\n" + "-"*60 + "\n")
+        return jsonify({"answer": response.choices[0].message.content})
 
     except Exception as e:
-        print(f"\nGPT API Error: {e}")
+        print("❌ Error in backend:", e)
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)

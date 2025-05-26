@@ -1,5 +1,27 @@
+# Python
 venv/
-.env
 __pycache__/
+*.pyc
+*.pyo
+
+# React
+node_modules/
+build/
+.env.local
+.env.development
+.env.production
+.DS_Store
+
+# Logs
+*.log
+
+# CSV / Data Files
 *.csv
 *.db
+
+# OS-generated
+Thumbs.db
+.DS_Store
+
+# API key safety (if used)
+.env
