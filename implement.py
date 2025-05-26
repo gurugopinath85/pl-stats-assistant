@@ -44,7 +44,7 @@ Be cautious but helpful in making OVER/UNDER-style suggestions.
 @app.route("/ask", methods=["POST"])
 def ask():
     try:
-        user_question = request.json.get("question")  # ✅ Make sure this matches
+        user_question = request.json.get("question") 
 
         context = f"""
 STANDARD PLAYER STATS:
@@ -66,7 +66,7 @@ Question: {user_question}
         return jsonify({"answer": response.choices[0].message.content})
 
     except Exception as e:
-        print("❌ Error in backend:", e)
+        print("Error in backend:", e)
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
